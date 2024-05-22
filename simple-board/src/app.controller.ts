@@ -3,6 +3,8 @@ import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
+  //app.service 코드 중 @Injectable()이용하여,  AppService 클래스 의존성 주입
+  // AppService의 인스턴스는 NestJS 프레임워크에서 생성하여 AppController주입
   constructor(private readonly appService: AppService) {}
 
   @Get()
