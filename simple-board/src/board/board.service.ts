@@ -35,11 +35,35 @@ export class BoardService {
   }
 
   find(id: number) {
-    return this.boards.filter((x) => {
-      return x.id === Number(id);
-    });
-    //const index = this.boards.findIndex((board) => board.id === id);
-    //console.log('index번호: ' + index);
-    //return this.boards[index];
+    const index = this.getBoardId(id);
+    return this.boards[index];
+  }
+
+  create(data) {
+    const newBoard = { id: this.getNextId(), ...data };
+    this.boards.push(newBoard);
+    return newBoard;
+  }
+
+  update(id: number, data) {
+    const index = this.getBoardId(id);
+
+    if (index > -1) {
+      this.boards[index] = {
+        ...this.boards[index],
+        ...data,
+      };
+      return this.boards[index];
+    }
+
+    return null;
+  }
+
+  getBoardId(id: number) {
+    return this.boards.findIndex((board) => board.id === id);
+  }
+
+  getNextId() {
+    return this.boards.sort((a, b) => b.id - a.id)[0].id + 1;
   }
 }
