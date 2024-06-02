@@ -1,5 +1,5 @@
 /**
- * providers: 모듈이 생성하고, 의존성 주입 컨테이너에 추가할 클래스 인스턴스 또는 값의 배열| 주로 서비스와 리포ㅓ지토리 등이 여기에 포함됨
+ * providers: 모듈이 생성하고, 의존성 주입 컨테이너에 추가할 클래스 인스턴스 또는 값의 배열| 주로 서비스와 리포지토리 등이 여기에 포함됨
  * controllers: 모듈이 정의하는 컨트롤러의 배열, 컨트롤러는 클라이언트의 요청을 처리하고, 적절한 응답을 반환하는 역할
  * imports: 모듈이 의존하는 다른 모듈의 배열, NestJs는 이러한 모듈들을 현재 모듈의 providers와 controller가 사용할 수 있도록 제공
  * export: 모듈에서 제공하며, 다른 모듈에서 import하여 사용할 수 있는 providers의 배열
@@ -32,14 +32,20 @@
 
  */
 
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { BoardModule } from './board/board.module';
+import { LoggingMiddleWare } from './middleware/logging.middleware';
+import ConfigModule from './config';
 
 @Module({
-  imports: [BoardModule],
+  imports: [ConfigModule(), BoardModule],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggingMiddleWare).forRoutes('*');
+  }
+}
