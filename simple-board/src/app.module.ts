@@ -39,6 +39,9 @@ import { BoardModule } from './board/board.module';
 import { LoggingMiddleWare } from './middleware/logging.middleware';
 import ConfigModule from './config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { config } from 'dotenv';
+
+config({ path: '.env.local' });
 
 @Module({
   imports: [
